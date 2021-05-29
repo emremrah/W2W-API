@@ -1,14 +1,3 @@
-from flask import Flask
+from . import create_app
 
-from . import __version__
-
-app = Flask(__name__)
-
-
-@app.route('/', methods=['GET'])
-def default():
-    return {'version': __version__}
-
-
-if __name__ == '__main__':
-    app.run(port=41000)
+app = create_app()
