@@ -59,6 +59,9 @@ def filter_genres(movies: List[Movie], genres: List[str]):
     movie."""
     matched_movies: List[Movie] = []
 
+    # convert genres to English
+    genres = [GENRES[genre] for genre in genres]
+
     for movie in movies:
         # get genres of the movie
         movie_genres = movie.get('genres', [])
