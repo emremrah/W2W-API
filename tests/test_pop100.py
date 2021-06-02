@@ -14,7 +14,7 @@ class TestTop100:
         movies = filter_genres(self.test_movies, ['Drama'])
         assert len(movies)
 
-        movies = filter_genres(self.test_movies, ['Comedy'])
+        movies = filter_genres(self.test_movies, ['Komedi'])
         assert not len(movies)
 
     def test_rating(self):
