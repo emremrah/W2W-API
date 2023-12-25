@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import diskcache as dc
 from flask import jsonify, request
-from imdb import IMDb
+from imdb import Cinemagoer
 from imdb.Movie import Movie
 
 from wtw.assets.genres import GENRES
@@ -13,10 +13,10 @@ from .models import MovieModel, Top100Request
 app = create_app()
 cache = dc.Cache('./tmp')
 
-ia = IMDb()
+ia = Cinemagoer()
 
 MOVIE_EXPIRE = 1 * 60 * 60 * 24  # a day
-POP100_EXPIRE = 1 * 60 * 60 # an hour
+POP100_EXPIRE = 1 * 60 * 60  # an hour
 
 
 def check_rating(movie: Movie, min_rating: float):

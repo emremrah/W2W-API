@@ -1,9 +1,7 @@
-Flask
-flask-cors
-imdbpy
+Flask==3.0.0
+flask-cors==4.0.0
 requests
-gunicorn
-pytest
-coverage
-pydantic
-diskcache
+diskcache==5.6.3
+gunicorn==21.2.0
+pydantic==2.5.3
+# TODO add cinemagoer

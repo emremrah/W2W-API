@@ -1,7 +1,8 @@
-import imdb
+from imdb import Cinemagoer
+
 from wtw.app import check_rating, filter_genres, get_movies
 
-ia = imdb.IMDb()
+ia = Cinemagoer()
 
 
 class TestTop100:

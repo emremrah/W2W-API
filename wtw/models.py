@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class Top100Request:
     class Request(BaseModel):
-        genres: List[str]
+        genres: List[str] = []
         min_rating: Union[int, float] = 0
         search_in: int = 100
 
