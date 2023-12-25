@@ -5,9 +5,8 @@ from flask import jsonify, request
 from imdb import Cinemagoer
 from imdb.Movie import Movie
 
-from wtw.assets.genres import GENRES
-
 from . import create_app
+from .constants import GENRES
 from .models import MovieModel, Top100Request
 
 app = create_app()
@@ -58,9 +57,6 @@ def filter_genres(movies: List[Movie], genres: List[str]):
     If any genre of a movie is not in given list of genres, filter our that
     movie."""
     matched_movies: List[Movie] = []
-
-    # convert genres to English
-    genres = [GENRES[genre] for genre in genres]
 
     for movie in movies:
         # get genres of the movie
@@ -129,4 +125,4 @@ def get_top_100():
 
 @app.route('/genres', methods=['GET'])
 def get_genres():
-    return jsonify(sorted(list(GENRES.keys())))
+    return jsonify(sorted(list(GENRES)))
