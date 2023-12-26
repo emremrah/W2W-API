@@ -11,7 +11,7 @@ from wtw.models import MovieModel, Top100Request
 from . import create_app
 
 app = create_app()
-cache = dc.Cache('./tmp')
+cache = dc.Cache('./cache')
 
 ia = Cinemagoer()
 
