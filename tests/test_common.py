@@ -1,4 +1,4 @@
-from wtw import __version__
+from wtw.api import __version__
 
 
 def test_default(client):

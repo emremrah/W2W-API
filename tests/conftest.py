@@ -1,5 +1,5 @@
 import pytest
-from wtw import create_app
+from wtw.api import create_app
 
 
 @pytest.fixture

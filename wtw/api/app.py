@@ -5,9 +5,10 @@ from flask import jsonify, request
 from imdb import Cinemagoer
 from imdb.Movie import Movie
 
+from wtw.constants import GENRES
+from wtw.models import MovieModel, Top100Request
+
 from . import create_app
-from .constants import GENRES
-from .models import MovieModel, Top100Request
 
 app = create_app()
 cache = dc.Cache('./tmp')

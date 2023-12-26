@@ -1,6 +1,6 @@
 from imdb import Cinemagoer
 
-from wtw.app import check_rating, filter_genres, get_movies
+from wtw.api.app import check_rating, filter_genres, get_movies
 
 ia = Cinemagoer()
 
