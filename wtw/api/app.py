@@ -3,10 +3,11 @@ from typing import Dict, List
 from flask import jsonify, request
 from imdb import Cinemagoer
 from imdb.Movie import Movie
+from imdb.parser.http import IMDbHTTPAccessSystem
 
 from wtw.caching import cache
-from wtw.config import POP100_EXPIRE
 from wtw.constants import GENRES
+from wtw.core import get_pop_100_list
 from wtw.models import MovieModel, Top100Request
 from wtw.movies import get_movie
 
@@ -14,7 +15,7 @@ from . import create_app
 
 app = create_app()
 
-ia = Cinemagoer()
+ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem='http')  # type: ignore
 
 
 def check_rating(movie: Movie, min_rating: float):
@@ -59,11 +60,7 @@ def get_pop_100(genres: List[str], min_rating: float, search_in: int):
     """
     filtered_movies: List[Dict] = []
     # get 100 most popular movies
-    if 'pop100' in cache:
-        pop100 = cache.get('pop100')
-    else:
-        pop100: List[Movie] = ia.get_popular100_movies()
-        cache.set('pop100', pop100, expire=POP100_EXPIRE)  # expire in a hour
+    pop100 = get_pop_100_list(ia, cache)
 
     # limit in top # of movies
     pop100 = pop100[:search_in]
