@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 
-from diskcache import Cache
 from imdb.Movie import Movie
 from imdb.parser.http import IMDbHTTPAccessSystem
 
+from wtw.caching import Cache
 from wtw.config import POP100_EXPIRE
 from wtw.models import MovieModel
 from wtw.movies import get_movie
@@ -16,8 +16,8 @@ def check_rating(movie: Movie, min_rating: float):
     return True
 
 
-def get_pop_100_list(ia: IMDbHTTPAccessSystem, cache: Cache):
-    if "pop100" in cache:
+def get_pop_100_list(ia: IMDbHTTPAccessSystem, cache: Optional[Cache]):
+    if cache is not None and "pop100" in cache:
         pop100 = cache.get("pop100")
     else:
         pop100: List[Movie] = ia.get_popular100_movies()
@@ -48,7 +48,7 @@ def filter_genres(movies: List[Movie], genres: List[str]):
 
 def get_pop_100(
     ia: IMDbHTTPAccessSystem,
-    cache: Cache,
+    cache: Optional[Cache],
     genres: List[str],
     min_rating: float,
     search_in: int,

@@ -2,7 +2,7 @@ from flask import jsonify, request
 from imdb import Cinemagoer
 from imdb.parser.http import IMDbHTTPAccessSystem
 
-from wtw.caching import cache
+from wtw import caching
 from wtw.constants import GENRES
 from wtw.core import get_pop_100
 from wtw.models import Top100Request
@@ -12,6 +12,8 @@ from . import create_app
 app = create_app()
 
 ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem='http')  # type: ignore
+
+cache = caching.init_cache()
 
 
 @app.route('/pop100', methods=['POST'])

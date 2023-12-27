@@ -1,9 +1,9 @@
 from typing import Iterable, Optional
 
-from diskcache import Cache
 from imdb.Movie import Movie
 from imdb.parser.http import IMDbHTTPAccessSystem
 
+from wtw.caching import Cache
 from wtw.config import MOVIE_EXPIRE
 
 
