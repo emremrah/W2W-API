@@ -1,22 +1,20 @@
 from typing import Dict, List
 
-import diskcache as dc
 from flask import jsonify, request
 from imdb import Cinemagoer
 from imdb.Movie import Movie
 
+from wtw.caching import cache
+from wtw.config import POP100_EXPIRE
 from wtw.constants import GENRES
 from wtw.models import MovieModel, Top100Request
+from wtw.movies import get_movie
 
 from . import create_app
 
 app = create_app()
-cache = dc.Cache('./cache')
 
 ia = Cinemagoer()
-
-MOVIE_EXPIRE = 1 * 60 * 60 * 24  # a day
-POP100_EXPIRE = 1 * 60 * 60  # an hour
 
 
 def check_rating(movie: Movie, min_rating: float):
@@ -24,31 +22,6 @@ def check_rating(movie: Movie, min_rating: float):
     if movie.get('rating', 0) < min_rating:
         return False
     return True
-
-
-def get_movies(movies: List[Movie], use_cache: bool = True):
-    """
-    Get additional data for movies.
-
-    For a given list of movies, get additional genres and plot information for
-    them and return a new list of movies."""
-    updated_movies: List[Movie] = []
-
-    for movie in movies:
-        movie_id = movie.getID()
-
-        # check if movie is already in cache
-        if movie_id in cache and use_cache:
-            updated_movies.append(cache[movie.getID()])
-            # update expire date
-            cache.touch(movie_id)
-        else:
-            movie = ia.get_movie(
-                movie_id, info=['main', 'plot', 'genres'])
-            updated_movies.append(movie)
-            cache.set(movie_id, movie, expire=MOVIE_EXPIRE)
-
-    return updated_movies
 
 
 def filter_genres(movies: List[Movie], genres: List[str]):
@@ -99,7 +72,7 @@ def get_pop_100(genres: List[str], min_rating: float, search_in: int):
     pop100 = [movie for movie in pop100 if check_rating(movie, min_rating)]
 
     # get additional info for the movies
-    pop100 = get_movies(pop100)
+    pop100 = [get_movie(movie.movieID, ia, cache) for movie in pop100]
 
     pop100 = filter_genres(pop100, genres)
 
