@@ -91,6 +91,7 @@ def get_pop_100(
             plot=movie.get("plot outline", ""),
             rating=movie.get("rating"),
             genres=movie.get("genre", []),
+            image_url=movie.get_fullsizeURL(),
         )
         filtered_movies.append(movie)
 

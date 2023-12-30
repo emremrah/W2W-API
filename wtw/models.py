@@ -16,3 +16,4 @@ class MovieModel(BaseModel):
     plot: Optional[str]
     rating: Optional[float]
     genres: Optional[List[str]]
+    image_url: Optional[str] = None
