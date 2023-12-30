@@ -5,6 +5,7 @@ from imdb.parser.http import IMDbHTTPAccessSystem
 
 from wtw.caching import Cache
 from wtw.config import POP100_EXPIRE
+from wtw.constants import IMDB_MOVIE_URL
 from wtw.models import MovieModel
 from wtw.movies import get_movie
 
@@ -92,6 +93,7 @@ def get_pop_100(
             rating=movie.get("rating"),
             genres=movie.get("genre", []),
             image_url=movie.get_fullsizeURL(),
+            imdb_url=IMDB_MOVIE_URL.format(movie.movieID),
         )
         filtered_movies.append(movie)
 

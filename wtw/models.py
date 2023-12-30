@@ -17,3 +17,4 @@ class MovieModel(BaseModel):
     rating: Optional[float]
     genres: Optional[List[str]]
     image_url: Optional[str] = None
+    imdb_url: Optional[str] = None

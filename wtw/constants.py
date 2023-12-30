@@ -23,3 +23,5 @@ GENRES = [
     'War',
     'Western',
 ]
+
+IMDB_MOVIE_URL = 'https://www.imdb.com/title/tt{}/'
