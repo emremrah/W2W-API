@@ -18,3 +18,4 @@ class MovieModel(BaseModel):
     genres: Optional[List[str]]
     image_url: Optional[str] = None
     imdb_url: Optional[str] = None
+    ai_summary: Optional[str] = None

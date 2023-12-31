@@ -85,6 +85,11 @@ def get_pop_100(
 
     pop100_movies = filter_genres(pop100_movies, genres)
 
+    # ask ai
+    from mock.openai import ask_openai
+    import json
+    ai_summaries: Dict = {m['title']: m for m in json.loads(ask_openai())}
+
     for movie in pop100_movies:
         movie = MovieModel(
             id=movie.getID(),
@@ -94,6 +99,8 @@ def get_pop_100(
             genres=movie.get("genre", []),
             image_url=movie.get_fullsizeURL(),
             imdb_url=IMDB_MOVIE_URL.format(movie.movieID),
+            ai_summary=ai_summaries.get(
+                movie.get("title"), {}).get("explanation"),
         )
         filtered_movies.append(movie)
 
