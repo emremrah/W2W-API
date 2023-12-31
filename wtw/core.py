@@ -1,8 +1,10 @@
-from typing import List, Optional
+import json
+from typing import Dict, List, Optional
 
 from imdb.Movie import Movie
 from imdb.parser.http import IMDbHTTPAccessSystem
 
+from mock.openai import ask_openai
 from wtw.caching import Cache
 from wtw.config import POP100_EXPIRE
 from wtw.constants import IMDB_MOVIE_URL
@@ -86,9 +88,8 @@ def get_pop_100(
     pop100_movies = filter_genres(pop100_movies, genres)
 
     # ask ai
-    from mock.openai import ask_openai
-    import json
-    ai_summaries: Dict = {m['title']: m for m in json.loads(ask_openai())}
+    ai_summaries: Dict = json.loads(ask_openai(
+        [movie.get("title") for movie in pop100_movies]))
 
     for movie in pop100_movies:
         movie = MovieModel(
