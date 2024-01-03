@@ -8,6 +8,9 @@ class Top100Request:
         genres: List[str] = []
         min_rating: Union[int, float] = 0
         search_in: int = 100
+        use_ai: bool = False
+        user_prompt: Optional[str] = None
+
 
 
 class MovieModel(BaseModel):

@@ -55,6 +55,8 @@ def get_pop_100(
     genres: List[str],
     min_rating: float,
     search_in: int,
+    use_ai: bool = False,
+    user_prompt: Optional[str] = None,
 ) -> List[MovieModel]:
     """
     Get most popular 100 movies from IMDb and filter the results.
@@ -87,9 +89,12 @@ def get_pop_100(
 
     pop100_movies = filter_genres(pop100_movies, genres)
 
-    # ask ai
-    ai_summaries: Dict = json.loads(ask_openai(
-        [movie.get("title") for movie in pop100_movies]))
+    # ask ai if enabled
+    ai_summaries: Dict = {}
+    if use_ai:
+        ai_summaries: Dict = json.loads(
+            ask_openai([movie.get("title") for movie in pop100_movies])
+        )
 
     for movie in pop100_movies:
         movie = MovieModel(
@@ -100,8 +105,9 @@ def get_pop_100(
             genres=movie.get("genre", []),
             image_url=movie.get_fullsizeURL(),
             imdb_url=IMDB_MOVIE_URL.format(movie.movieID),
-            ai_summary=ai_summaries.get(
-                movie.get("title"), {}).get("explanation"),
+            ai_summary=ai_summaries.get(movie.get("title"), {}).get(
+                "explanation"
+            ),
         )
         filtered_movies.append(movie)
 

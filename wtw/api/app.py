@@ -21,7 +21,9 @@ def get_top_100():
     """Get most popular 100 movies from IMDb and return filtered results."""
     req = Top100Request.Request(**request.get_json())
 
-    pop100 = get_pop_100(ia, cache, req.genres, req.min_rating, req.search_in)
+    pop100 = get_pop_100(
+        ia, cache, req.genres, req.min_rating, req.search_in, req.use_ai
+    )
     pop100 = [movie.model_dump() for movie in pop100]
 
     return jsonify(pop100)
