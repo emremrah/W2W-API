@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 from wtw import __version__
 
-with open('requirements.txt', 'r') as f:
+with open("requirements.txt", "r") as f:
     required = f.read().splitlines()
 
 setup(
@@ -15,5 +15,5 @@ setup(
     zip_safe=False,
     description="WhatToWatch is a web application that helps you find movies to watch.",
     install_requires=required,
-    python_requires='>=3.8',
+    python_requires=">=3.8",
 )

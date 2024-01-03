@@ -12,7 +12,6 @@ class Top100Request:
         user_prompt: Optional[str] = None
 
 
-
 class MovieModel(BaseModel):
     id: str
     title: str

@@ -11,12 +11,12 @@ from . import create_app
 
 app = create_app()
 
-ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem='http')  # type: ignore
+ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem="http")  # type: ignore
 
 cache = caching.init_cache()
 
 
-@app.route('/pop100', methods=['POST'])
+@app.route("/pop100", methods=["POST"])
 def get_top_100():
     """Get most popular 100 movies from IMDb and return filtered results."""
     req = Top100Request.Request(**request.get_json())
@@ -29,6 +29,6 @@ def get_top_100():
     return jsonify(pop100)
 
 
-@app.route('/genres', methods=['GET'])
+@app.route("/genres", methods=["GET"])
 def get_genres():
     return jsonify(sorted(list(GENRES)))
