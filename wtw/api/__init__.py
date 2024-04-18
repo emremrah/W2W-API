@@ -1,29 +1,35 @@
-import os
-
-from flask import Flask
-from flask_cors import CORS
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 
 from wtw import __version__
+from wtw.api.app import router as api_router  # noqa
+from wtw.api.router import router
+
+origins = ["*"]  # TODO
 
 
-def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(SECRET_KEY="dev")
+app = FastAPI(title="What to Watch API", version=__version__)
 
-    CORS(app)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    if test_config is None:
-        app.config.from_pyfile("config.py", silent=True)
-    else:
-        app.config.from_mapping(test_config)
+app.include_router(router, prefix="/api")
 
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
 
-    @app.route("/", methods=["GET"])
-    def default():
-        return {"version": __version__}
+@app.get("/api")
+async def index():
+    return {"message": "What to Watch API", "version": __version__}
 
-    return app
+
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400, content={"detail": exc.errors(), "body": exc.model}
+    )
