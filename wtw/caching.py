@@ -1,3 +1,5 @@
+from typing import Optional
+
 import diskcache
 
 from wtw.helpers import validate_kwargs
@@ -16,11 +18,11 @@ class Cache:
         """Check if key is in cache."""
         return key in self.cache
 
-    def get(self, key: str):
+    def get(self, key: str, default=None):
         """Get value from cache."""
-        return self.cache.get(key)
+        return self.cache.get(key, default=default)
 
-    def set(self, key: str, value, expire: int = 0):
+    def set(self, key: str, value, expire: Optional[float] = None):
         """Set value in cache."""
         self.cache.set(key, value, expire=expire)
 

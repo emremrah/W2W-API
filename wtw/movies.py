@@ -32,6 +32,6 @@ def get_movie(
     else:
         movie = ia.get_movie(movie_id, info=infoset)
         if cache is not None:
-            cache.set(movie_id, movie, expire=MOVIE_EXPIRE)
+            cache.set(movie_id, movie, expire=None)
 
     return movie
