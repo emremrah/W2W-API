@@ -9,6 +9,7 @@ from wtw.caching import Cache
 from wtw.config import POP100_EXPIRE
 from wtw.constants import IMDB_MOVIE_URL
 from wtw.movies import get_movie
+from wtw.parsers import parse_imdb_movie
 from wtw.scrapers.fetch import get_pop_movies_imdb_parser
 
 ai_assistant = CustomAssistant()
@@ -85,11 +86,13 @@ def get_pop_100_movies(
 
     pop100_movies = filter_genres(pop100_movies, genres)
 
+    movies = [parse_imdb_movie(movie) for movie in pop100_movies]
+
     # ask ai if enabled
     ai_summaries: dict = {}
     if use_ai and user_prompt:
         ai_summaries = ai_assistant.ask_for_movies(  # type: ignore
-            user_prompt, genres, CustomAssistant.format_movies(pop100_movies)
+            user_prompt, genres, CustomAssistant.format_movies(movies)
         )
         # convert list of dicts to dict
         ai_summaries = {
