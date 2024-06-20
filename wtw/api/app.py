@@ -1,16 +1,11 @@
 from typing import List
 
-from imdb import Cinemagoer
-from imdb.parser.http import IMDbHTTPAccessSystem
-
 from wtw import caching, core
 from wtw.constants import GENRES
 from wtw.models import Movie
 
 from .models import Top100Movie
 from .router import router
-
-ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem="http")  # type: ignore
 
 cache = caching.init_cache()
 
@@ -19,7 +14,6 @@ cache = caching.init_cache()
 async def get_pop_100_movies(request: Top100Movie.Request):
     """Get most popular 100 movies from IMDb and return filtered results."""
     pop100 = core.get_pop_100_movies(
-        ia,
         cache,
         request.genres,
         request.min_rating,

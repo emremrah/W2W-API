@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from imdb import Cinemagoer
 from imdb.Movie import Movie
 from imdb.parser.http import IMDbHTTPAccessSystem
 
@@ -13,6 +14,7 @@ from wtw.parsers import parse_imdb_movie
 from wtw.scrapers.fetch import get_pop_movies_imdb_parser
 
 ai_assistant = CustomAssistant()
+ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem="http")  # type: ignore
 
 
 def check_rating(movie: Movie, min_rating: float):
@@ -44,7 +46,6 @@ def filter_genres(movies: List[Movie], genres: List[str]):
 
 
 def get_pop_100_movies(
-    ia: IMDbHTTPAccessSystem,
     cache: Optional[Cache],
     genres: List[str],
     min_rating: float,
