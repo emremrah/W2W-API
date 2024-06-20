@@ -3,9 +3,12 @@ from typing import List, Optional
 from imdb import Cinemagoer
 from imdb.Movie import Movie
 from imdb.parser.http import IMDbHTTPAccessSystem
+from loguru import logger
 
 from wtw import models
+from wtw.ai import assistant
 from wtw.ai.assistant import CustomAssistant
+from wtw.ai.config import OPENAI_API_KEY
 from wtw.caching import Cache
 from wtw.config import POP100_EXPIRE
 from wtw.constants import IMDB_MOVIE_URL
@@ -13,7 +16,7 @@ from wtw.movies import get_movie
 from wtw.parsers import parse_imdb_movie
 from wtw.scrapers.fetch import get_pop_movies_imdb_parser
 
-ai_assistant = CustomAssistant()
+ai_assistant = assistant.OpenAIAssistant(OPENAI_API_KEY)
 ia: IMDbHTTPAccessSystem = Cinemagoer(accessSystem="http")  # type: ignore
 
 
@@ -53,21 +56,12 @@ def get_pop_100_movies(
     use_ai: bool = False,
     user_prompt: Optional[str] = None,
 ) -> List[models.Movie]:
-    """
-    Get most popular 100 movies from IMDb and filter the results.
-
-    Arguments
-    ---------
-    genres: the list of genre names to filter movies that doesn't have any of
-    them
-    min_rating: the minimum rating a movie can have
-    search_in: search in maximum number of # movies
-
-    """
+    """Get most popular 100 movies from IMDb and filter the results."""
     # get most popular movies
     if cache is not None and "pop100" in cache:
-        pop100_movies = cache.get("pop100", default=[])
+        pop100_movies = cache.get("pop100", default=[])  # type: ignore
     else:
+        logger.info("Fetching popular 100 movies from IMDb")
         pop100_movies = get_pop_movies_imdb_parser(ia)
         if cache is not None:
             cache.set("pop100", pop100_movies, expire=POP100_EXPIRE)
@@ -95,6 +89,7 @@ def get_pop_100_movies(
         ai_summaries = ai_assistant.ask_for_movies(  # type: ignore
             user_prompt, genres, CustomAssistant.format_movies(movies)
         )
+        logger.debug("AI summaries: {}", ai_summaries)
         # convert list of dicts to dict
         ai_summaries = {
             summary.title: summary.model_dump() for summary in ai_summaries
